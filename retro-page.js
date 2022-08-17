@@ -18,7 +18,6 @@ MemberStack.onReady.then(function(member) {
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
-    setCounter();
 	getUserData();
 }
 
@@ -87,9 +86,11 @@ function setCounter(totalPurchases, purchasesThisMonth) {
     const purchasesCounter = document.getElementById('purchases_counter');
 
     if (userPlan === PREMIUM_PLAN) {
-        purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${5 - purchasesThisMonth} Retros herunterladen.`
+        const purchasesLeftThisMonth = 5 - purchasesThisMonth;
+        purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${purchasesLeftThisMonth} Retros herunterladen.`
     }
     else if (userPlan === FREEMIUM_PLAN) {
-        purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${3 - totalPurchases} Retros herunterladen.`
+        const purchasesLeft = 3 - totalPurchases;
+        purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${purchasesLeft} Retros herunterladen.`
     }
 }
