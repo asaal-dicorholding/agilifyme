@@ -1,18 +1,24 @@
 "use strict";
 
+const FREEMIUM_PLAN = '62f4ec45de6d360004a97625';
+const PREMIUM_PLAN = '62e286ce155f7600049ab645';
+
 const productSlug = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
 let userId;
+let userPlan;
 
 MemberStack.onReady.then(function(member) {   
 	if (member.loggedIn) {
-  console.log(member["id"]);
-		userId = member["id"]
+        console.log(member["id"]);
+        userId = member["id"];
+        userPlan = member.membership["id"];
 	}
-	})
+})
 
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
+    setCounter();
 	getUserData();
 }
 
@@ -61,17 +67,29 @@ function getUserData() {
     // user has already bought this retro
     if (data.url) {
     	const downloadButton = document.getElementById('download-retro');
-      downloadButton.classList.remove('hidden');
-      downloadButton.href = data.url;      
+        downloadButton.classList.remove('hidden');
+        downloadButton.href = data.url;      
     }
     else {
     	const buyButton = document.getElementById('buy-retro');
-      buyButton.classList.remove('hidden')
-      buyButton.addEventListener('click', buyRetro);
+        buyButton.classList.remove('hidden')
+        buyButton.addEventListener('click', buyRetro);
     }
+    setCounter(data.totalPurchases, data.purchasesThisMonth);
   })
   .catch((error) => {
     console.error('Error:', error);
   });
 }
+}
+
+function setCounter(totalPurchases, purchasesThisMonth) {
+    const purchasesCounter = document.getElementById('purchases_counter');
+
+    if (userPlan === PREMIUM_PLAN) {
+        purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${5 - purchasesThisMonth} Retros herunterladen.`
+    }
+    else if (userPlan === FREEMIUM_PLAN) {
+        purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${3 - totalPurchases} Retros herunterladen.`
+    }
 }
