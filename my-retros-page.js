@@ -55,7 +55,7 @@ function removeNonPurchasedRetros(purchases) {
             const divToDelete = tag.closest('div[role="listitem"]');
 
             if (divToDelete) {
-                divToDelete.classList.remove('hidden');
+                divToDelete.remove();
             }
         }        
     });
