@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", init);
 
 function init() {
 	getUserData();
+    markAsFavorite();
 }
 
 function buyRetro() {
@@ -98,3 +99,32 @@ function setCounter(totalPurchases, purchasesThisMonth) {
         purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${purchasesLeft} Retros herunterladen.`
     }
 }
+
+function markAsFavorite() {
+    MemberStack.onReady.then(async (member) => { 
+        const metadata = await member.getMetaData(); 
+        const favorites = metadata.favorites || []; 
+  
+        if (favorites.indexOf(productSlug) > -1) {
+            // TODO: fill heart
+        }
+    });
+}
+
+function toggleFavorite() {
+    MemberStack.onReady.then(async (member) => { 
+        const metadata = await member.getMetaData(); 
+        const favorites = metadata.favorites || []; 
+        const index = favorites.indexOf(productSlug);
+  
+        if (index > -1) {
+            favorites.splice(index, 1);
+            // TODO: empty heart
+        }
+        else {
+            favorites.push(productSlug);
+            // TODO: fill heart
+        }
+        member.updateMetaData({favorites: favorites}) 
+    });
+  }

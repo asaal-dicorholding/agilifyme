@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", init);
 
 function init() {
 	getUserData();
+  // TODO: add event listener to heart button/image
 }
 
 function getUserData() {
@@ -34,6 +35,7 @@ function getUserData() {
   .then((data) => {
     setCounter(data.totalPurchases, data.purchasesThisMonth);
     setPurchasedTags(data.purchases);
+    markFavorites();
   })
   .catch((error) => {
     console.error('Error:', error);
@@ -62,4 +64,28 @@ function setPurchasedTags(purchases) {
             tag.innerText = 'Bereits gekauft';
         }
     });
+}
+
+function markFavorites() {
+  MemberStack.onReady.then(async (member) => { 
+      const metadata = await member.getMetaData(); 
+      const update = metadata.favorites || []; 
+      // TODO: mark favorites
+  });
+}
+
+function toggleFavorite(slug) {
+  MemberStack.onReady.then(async (member) => { 
+      const metadata = await member.getMetaData(); 
+      const favorites = metadata.favorites || []; 
+      const index = favorites.indexOf(slug);
+
+      if (index > -1) {
+          favorites.splice(index, 1);
+      }
+      else {
+          favorites.push(slug);
+      }
+      member.updateMetaData({favorites: favorites}) 
+  });
 }

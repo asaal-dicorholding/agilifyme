@@ -32,7 +32,7 @@ function getUserData() {
             throw new Error(response.message);
             })
         .then((data) => {
-            removeNonFavorites(data.purchases);
+            removeNonPurchasedRetros(data.purchases);
         })
         .catch((error) => {
             console.error(error.message);
@@ -40,13 +40,13 @@ function getUserData() {
         }
 }
 
-function removeNonFavorites(purchases) {
+function removeNonPurchasedRetros(purchases) {
     purchases.forEach(purchase => {
         const tag = document.getElementById(purchase);
         const divToDelete = tag.closest('div[role="listitem"]');
 
         if (divToDelete) {
-            divToDelete.remove()
+            divToDelete.classList.remove('hidden');
         }
     });
 }
