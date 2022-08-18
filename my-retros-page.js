@@ -41,12 +41,22 @@ function getUserData() {
 }
 
 function removeNonPurchasedRetros(purchases) {
-    purchases.forEach(purchase => {
-        const tag = document.getElementById(purchase);
-        const divToDelete = tag.closest('div[role="listitem"]');
+    const allRetroElements = document.querySelectorAll('p[role="id_finder"]');
+    const allRetroSlugs = [];
 
-        if (divToDelete) {
-            divToDelete.classList.remove('hidden');
-        }
+    allRetroElements.forEach(el => {
+        allRetroSlugs.push(el.id);
+    });
+
+    allRetroSlugs.forEach(slug => {
+        // if slug does not exist in purchases, remove the whole element
+        if (purchases.indexOf(slug) === -1) {
+            const tag = document.getElementById(slug);
+            const divToDelete = tag.closest('div[role="listitem"]');
+
+            if (divToDelete) {
+                divToDelete.classList.remove('hidden');
+            }
+        }        
     });
 }
