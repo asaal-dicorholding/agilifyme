@@ -106,7 +106,7 @@ function markAsFavorite() {
         const favorites = metadata.favorites || []; 
   
         if (favorites.indexOf(productSlug) > -1) {
-            const img = document.getElementById('favorite');
+            const img = document.getElementById(`favorite_${productSlug}`);
         
             if (img) {
                 img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf457b9ed32e24caa34_ri_heart-fill.svg";
@@ -123,7 +123,7 @@ function toggleFavorite() {
   
         if (index > -1) {
             favorites.splice(index, 1);
-            const img = document.getElementById('favorite');
+            const img = document.getElementById(`favorite_${productSlug}`);
         
             if (img) {
                 img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf454fbe1866509a97e_ri_heart-line.svg";
@@ -131,7 +131,7 @@ function toggleFavorite() {
         }
         else {
             favorites.push(productSlug);
-            const img = document.getElementById('favorite');
+            const img = document.getElementById(`favorite_${productSlug}`);
         
             if (img) {
                 img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf457b9ed32e24caa34_ri_heart-fill.svg";
