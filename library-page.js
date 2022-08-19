@@ -69,8 +69,15 @@ function setPurchasedTags(purchases) {
 function markFavorites() {
   MemberStack.onReady.then(async (member) => { 
       const metadata = await member.getMetaData(); 
-      const update = metadata.favorites || []; 
-      // TODO: mark favorites
+      const favorites = metadata.favorites || []; 
+      
+      favorites.forEach(slug => {
+        const img = document.getElementById(`favorite_${slug}`);
+        
+        if (img) {
+          img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf457b9ed32e24caa34_ri_heart-fill.svg";
+        }
+      })
   });
 }
 
@@ -81,10 +88,20 @@ function toggleFavorite(slug) {
       const index = favorites.indexOf(slug);
 
       if (index > -1) {
-          favorites.splice(index, 1);
+        favorites.splice(index, 1);
+        const img = document.getElementById(`favorite_${slug}`);
+        
+        if (img) {
+          img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf454fbe1866509a97e_ri_heart-line.svg";
+        }
       }
       else {
-          favorites.push(slug);
+        favorites.push(slug);
+        const img = document.getElementById(`favorite_${slug}`);
+        
+        if (img) {
+          img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf457b9ed32e24caa34_ri_heart-fill.svg";
+        }
       }
       member.updateMetaData({favorites: favorites}) 
   });
