@@ -73,11 +73,13 @@ function getUserData() {
             if (data.url) {
                 const downloadButton = document.getElementById('download-retro');
                 downloadButton.classList.remove('hidden');
+                downloadButton.style.display = 'block';
                 downloadButton.href = data.url;      
             }
             else {
                 const buyButton = document.getElementById('buy-retro');
                 buyButton.classList.remove('hidden')
+                buyButton.style.display = 'block';
                 buyButton.addEventListener('click', buyRetro);
             }
             setCounter(data.totalPurchases, data.purchasesThisMonth);
@@ -98,6 +100,7 @@ function setCounter(totalPurchases, purchasesThisMonth) {
         if (purchasesLeftThisMonth === 0) {
             const singleBuyButton = document.getElementById('single-buy-retro');
             singleBuyButton.classList.remove('hidden');
+            singleBuyButton.style.display = 'block';
         }
     }
     else if (userPlan === FREEMIUM_PLAN) {
@@ -108,6 +111,7 @@ function setCounter(totalPurchases, purchasesThisMonth) {
         if (totalPurchases === 0) {
             const singleBuyButton = document.getElementById('single-buy-retro');
             singleBuyButton.classList.remove('hidden');
+            singleBuyButton.style.display = 'block';
         }
     }
 }
