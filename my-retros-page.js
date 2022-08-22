@@ -16,7 +16,7 @@ function init() {
 
 function getUserData() {
 	const token = MemberStack.getToken();
-  
+    
 	if (userId && token) {
         fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/user/${userId}`, {
             method: 'GET',
@@ -33,6 +33,8 @@ function getUserData() {
             })
         .then((data) => {
             removeNonPurchasedRetros(data.purchases);
+            const purchasedRetros = document.getElementById('my-retros');
+            purchasedRetros.classList.remove('hidden');
         })
         .catch((error) => {
             console.error(error.message);
