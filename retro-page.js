@@ -93,10 +93,22 @@ function setCounter(totalPurchases, purchasesThisMonth) {
     if (userPlan === PREMIUM_PLAN) {
         const purchasesLeftThisMonth = 5 - purchasesThisMonth;
         purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${purchasesLeftThisMonth} Retros herunterladen.`
+        
+        // show single buy button
+        if (purchasesLeftThisMonth === 0) {
+            const singleBuyButton = document.getElementById('single-buy-retro');
+            singleBuyButton.classList.remove('hidden');
+        }
     }
     else if (userPlan === FREEMIUM_PLAN) {
         const purchasesLeft = 3 - totalPurchases;
         purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${purchasesLeft} Retros herunterladen.`
+        
+        // show single buy button
+        if (totalPurchases === 0) {
+            const singleBuyButton = document.getElementById('single-buy-retro');
+            singleBuyButton.classList.remove('hidden');
+        }
     }
 }
 
