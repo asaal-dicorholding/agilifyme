@@ -33,8 +33,12 @@ function getUserData() {
             })
         .then((data) => {
             removeNonPurchasedRetros(data.purchases);
+            // show retros when loaded
             const purchasedRetros = document.getElementById('my-retros');
             purchasedRetros.classList.remove('hidden');
+            // show spinner while loading
+            const spinner = document.getElementById('spinner');
+            spinner.classList.remove('show');
         })
         .catch((error) => {
             console.error(error.message);
