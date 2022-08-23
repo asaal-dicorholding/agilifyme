@@ -4,9 +4,12 @@ const FREEMIUM_PLAN = '62f4ec45de6d360004a97625';
 const PREMIUM_PLAN = '62e286ce155f7600049ab645';
 
 const productSlug = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+const isRedirectFromStripe = new URL(location.href).searchParams.get('success') === 'true';
+
 let userId;
 let userPlan;
 let alreadyBought = false;
+let spinner;
 
 MemberStack.onReady.then(function(member) {   
 	if (member.loggedIn) {
@@ -19,7 +22,13 @@ MemberStack.onReady.then(function(member) {
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
-    const spinner = document.getElementById('spinner');
+    if (isRedirectFromStripe) {
+        const redirectMessage = document.getElementById('redirectMessage').innerHTML;
+        redirectMessage.innerHTML = 'Einzelkauf erfolgreich, du kannst die Retro jetzt herunterladen!';
+        redirectMessage.classList.remove('hidden');
+    }
+
+    spinner = document.getElementById('spinner');
 	getUserData();
     markAsFavorite();
 }
