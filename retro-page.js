@@ -6,6 +6,7 @@ const PREMIUM_PLAN = '62e286ce155f7600049ab645';
 const productSlug = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
 let userId;
 let userPlan;
+let alreadyBought = false;
 
 MemberStack.onReady.then(function(member) {   
 	if (member.loggedIn) {
@@ -52,6 +53,9 @@ function buyRetro() {
     }
 }
 
+/**
+ * fetches user data including made purchases from the backend
+ */
 function getUserData() {
 	const token = MemberStack.getToken();
   
@@ -72,12 +76,14 @@ function getUserData() {
             const spinner = document.getElementById('spinner');
             // user has already bought this retro
             if (data.url) {
+                alreadyBought = true;
                 const downloadButton = document.getElementById('download-retro');
                 spinner.classList.remove('show');
                 downloadButton.classList.remove('hidden');
                 downloadButton.style.display = 'block';
                 downloadButton.href = data.url;      
             }
+            // user has not yet bought this retro
             else {
                 const buyButton = document.getElementById('buy-retro');
                 spinner.classList.remove('show');
@@ -92,15 +98,20 @@ function getUserData() {
 }
 }
 
+/**
+ * sets a text saying users how many purchases they have left within their subscription plan 
+ * @param {number of total purchases for freemium users} totalPurchases 
+ * @param {number of purchases this month for premium users} purchasesThisMonth 
+ */
 function setCounter(totalPurchases, purchasesThisMonth) {
     const purchasesCounter = document.getElementById('purchases_counter');
 
     if (userPlan === PREMIUM_PLAN) {
         const purchasesLeftThisMonth = 5 - purchasesThisMonth;
-        purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${purchasesLeftThisMonth} Retros herunterladen.`
+        purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${Math.max(purchasesLeftThisMonth,0)} Retros herunterladen.`
         
-        // show single buy button
-        if (purchasesLeftThisMonth === 0) {
+        // show single buy button only when no credits left AND when user has not yet bought retro
+        if (purchasesLeftThisMonth === 0 && !alreadyBought) {
             const singleBuyButton = document.getElementById('single-buy-retro');
             singleBuyButton.classList.remove('hidden');
             singleBuyButton.style.display = 'block';
@@ -108,10 +119,10 @@ function setCounter(totalPurchases, purchasesThisMonth) {
     }
     else if (userPlan === FREEMIUM_PLAN) {
         const purchasesLeft = 3 - totalPurchases;
-        purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${purchasesLeft} Retros herunterladen.`
+        purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${Math.max(purchasesLeft,0)} Retros herunterladen.`
         
-        // show single buy button
-        if (totalPurchases === 0) {
+        // show single buy button only when no credits left AND when user has not yet bought retro
+        if (totalPurchases === 0 && !alreadyBought) {
             const singleBuyButton = document.getElementById('single-buy-retro');
             singleBuyButton.classList.remove('hidden');
             singleBuyButton.style.display = 'block';
@@ -119,6 +130,9 @@ function setCounter(totalPurchases, purchasesThisMonth) {
     }
 }
 
+/**
+ * fills the heart icon when the slugId of the current retro is found in the user's favorites
+ */
 function markAsFavorite() {
     MemberStack.onReady.then(async (member) => { 
         const metadata = await member.getMetaData(); 
@@ -134,6 +148,9 @@ function markAsFavorite() {
     });
 }
 
+/**
+ * adds or removes slugId from memberstack metadata and fills or empties heart icon to visualize the current status 
+ */
 function toggleFavorite() {
     MemberStack.onReady.then(async (member) => { 
         const metadata = await member.getMetaData(); 
