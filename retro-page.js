@@ -107,8 +107,8 @@ function setCounter(totalPurchases, purchasesThisMonth) {
     const purchasesCounter = document.getElementById('purchases_counter');
 
     if (userPlan === PREMIUM_PLAN) {
-        const purchasesLeftThisMonth = 5 - purchasesThisMonth;
-        purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${Math.max(purchasesLeftThisMonth,0)} Retros herunterladen.`
+        const purchasesLeftThisMonth = Math.max(5 - purchasesThisMonth, 0);
+        purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${purchasesLeftThisMonth} Retros herunterladen.`
         
         // show single buy button only when no credits left AND when user has not yet bought retro
         if (purchasesLeftThisMonth === 0 && !alreadyBought) {
@@ -116,8 +116,8 @@ function setCounter(totalPurchases, purchasesThisMonth) {
         }
     }
     else if (userPlan === FREEMIUM_PLAN) {
-        const purchasesLeft = 3 - totalPurchases;
-        purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${Math.max(purchasesLeft,0)} Retros herunterladen.`
+        const purchasesLeft = Math.max(3 - totalPurchases, 0);
+        purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${purchasesLeft} Retros herunterladen.`
         
         // show single buy button only when no credits left AND when user has not yet bought retro
         if (totalPurchases === 0 && !alreadyBought) {
