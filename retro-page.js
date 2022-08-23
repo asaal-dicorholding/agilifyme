@@ -69,15 +69,18 @@ function getUserData() {
             throw new Error(response.message);
         }).then((data) => {
             console.log('Success:', data);
+            const spinner = document.getElementById('spinner');
             // user has already bought this retro
             if (data.url) {
                 const downloadButton = document.getElementById('download-retro');
+                spinner.classList.remove('show');
                 downloadButton.classList.remove('hidden');
                 downloadButton.style.display = 'block';
                 downloadButton.href = data.url;      
             }
             else {
                 const buyButton = document.getElementById('buy-retro');
+                spinner.classList.remove('show');
                 buyButton.classList.remove('hidden')
                 buyButton.style.display = 'block';
                 buyButton.addEventListener('click', buyRetro);
