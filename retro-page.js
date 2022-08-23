@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", init);
 
 function init() {
     if (isRedirectFromStripe) {
-        const redirectMessage = document.getElementById('redirectMessage').innerHTML;
+        const redirectMessage = document.getElementById('redirectMessage');
         redirectMessage.innerHTML = 'Einzelkauf erfolgreich, du kannst die Retro jetzt herunterladen!';
         redirectMessage.classList.remove('hidden');
     }
