@@ -93,7 +93,9 @@ function getUserData() {
                     downloadButton.style.display = 'block';
                     downloadButton.href = data.url;      
                 }
-                setCounter(data.totalPurchases, data.purchasesThisMonth);
+                else {
+                    setCounter(data.totalPurchases, data.purchasesThisMonth);
+                }
             }).catch((error) => {
             console.error(error.message);
         });
@@ -110,7 +112,6 @@ function setCounter(totalPurchases, purchasesThisMonth) {
 
     if (userPlan === PREMIUM_PLAN) {
         const purchasesLeftThisMonth = Math.max(5 - purchasesThisMonth, 0);
-        console.log("month", purchasesLeftThisMonth);
         purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${purchasesLeftThisMonth} Retros herunterladen.`
         
         // show buy button if credits left
@@ -130,7 +131,6 @@ function setCounter(totalPurchases, purchasesThisMonth) {
     }
     else if (userPlan === FREEMIUM_PLAN) {
         const purchasesLeft = Math.max(3 - totalPurchases, 0);
-        console.log("total", purchasesLeft);
         purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${purchasesLeft} Retros herunterladen.`
         
         // show buy button if credits left
