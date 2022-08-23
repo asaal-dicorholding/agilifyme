@@ -61,41 +61,41 @@ function getUserData() {
   
 	if (userId && token) {
         fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/retro/user/${userId}?slug=${productSlug}`, {
-        method: 'GET',
-        headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        },
-        }).then((response) => {
-            if (response.ok) {
-                return response.json()
-            }
-            throw new Error(response.message);
-        }).then((data) => {
-            console.log('Success:', data);
-            const spinner = document.getElementById('spinner');
-            // user has already bought this retro
-            if (data.url) {
-                alreadyBought = true;
-                const downloadButton = document.getElementById('download-retro');
-                spinner.classList.remove('show');
-                downloadButton.classList.remove('hidden');
-                downloadButton.style.display = 'block';
-                downloadButton.href = data.url;      
-            }
-            // user has not yet bought this retro
-            else {
-                const buyButton = document.getElementById('buy-retro');
-                spinner.classList.remove('show');
-                buyButton.classList.remove('hidden')
-                buyButton.style.display = 'block';
-                buyButton.addEventListener('click', buyRetro);
-            }
-            setCounter(data.totalPurchases, data.purchasesThisMonth);
-        }).catch((error) => {
-        console.error(error.message);
-    });
-}
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            },
+            }).then((response) => {
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new Error(response.message);
+            }).then((data) => {
+                console.log('Success:', data);
+                const spinner = document.getElementById('spinner');
+                // user has already bought this retro
+                if (data.url) {
+                    alreadyBought = true;
+                    const downloadButton = document.getElementById('download-retro');
+                    spinner.classList.remove('show');
+                    downloadButton.classList.remove('hidden');
+                    downloadButton.style.display = 'block';
+                    downloadButton.href = data.url;      
+                }
+                // user has not yet bought this retro
+                else {
+                    const buyButton = document.getElementById('buy-retro');
+                    spinner.classList.remove('show');
+                    buyButton.classList.remove('hidden')
+                    buyButton.style.display = 'block';
+                    buyButton.addEventListener('click', buyRetro);
+                }
+                setCounter(data.totalPurchases, data.purchasesThisMonth);
+            }).catch((error) => {
+            console.error(error.message);
+        });
+    }
 }
 
 /**
@@ -112,9 +112,7 @@ function setCounter(totalPurchases, purchasesThisMonth) {
         
         // show single buy button only when no credits left AND when user has not yet bought retro
         if (purchasesLeftThisMonth === 0 && !alreadyBought) {
-            const singleBuyButton = document.getElementById('single-buy-retro');
-            singleBuyButton.classList.remove('hidden');
-            singleBuyButton.style.display = 'block';
+            createPaymentLink();
         }
     }
     else if (userPlan === FREEMIUM_PLAN) {
@@ -123,9 +121,7 @@ function setCounter(totalPurchases, purchasesThisMonth) {
         
         // show single buy button only when no credits left AND when user has not yet bought retro
         if (totalPurchases === 0 && !alreadyBought) {
-            const singleBuyButton = document.getElementById('single-buy-retro');
-            singleBuyButton.classList.remove('hidden');
-            singleBuyButton.style.display = 'block';
+            createPaymentLink();
         }
     }
 }
@@ -175,4 +171,29 @@ function toggleFavorite() {
         }
         member.updateMetaData({favorites: favorites}) 
     });
-  }
+}
+
+function createPaymentLink() {
+    fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/payment-link/user/${userId}?slug=${productSlug}`, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            },
+            }).then((response) => {
+                if (response.ok) {
+                    return response.json()
+                }
+                throw new Error(response.message);
+            }).then((data) => {
+                console.log('Success:', data);
+                if (data.url) {
+                    const singleBuyButton = document.getElementById('single-buy-retro');
+                    singleBuyButton.href = data.url;
+                    singleBuyButton.classList.remove('hidden');
+                    singleBuyButton.style.display = 'block';
+                }
+            }).catch((error) => {
+            console.error(error.message);
+        });
+}
