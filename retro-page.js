@@ -19,6 +19,7 @@ MemberStack.onReady.then(function(member) {
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
+    const spinner = document.getElementById('spinner');
 	getUserData();
     markAsFavorite();
 }
@@ -73,7 +74,7 @@ function getUserData() {
                 throw new Error(response.message);
             }).then((data) => {
                 console.log('Success:', data);
-                const spinner = document.getElementById('spinner');
+
                 // user has already bought this retro
                 if (data.url) {
                     alreadyBought = true;
@@ -188,6 +189,9 @@ function toggleFavorite() {
 }
 
 function createPaymentLink() {
+    const token = MemberStack.getToken();
+
+    if (userId && token) {
     fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/payment-link/user/${userId}?slug=${productSlug}`, {
             method: 'GET',
             headers: {
@@ -203,6 +207,7 @@ function createPaymentLink() {
                 console.log('Success:', data);
                 if (data.url) {
                     const singleBuyButton = document.getElementById('single-buy-retro');
+                    spinner.classList.remove('show');
                     singleBuyButton.href = data.url;
                     singleBuyButton.classList.remove('hidden');
                     singleBuyButton.style.display = 'block';
@@ -210,4 +215,5 @@ function createPaymentLink() {
             }).catch((error) => {
             console.error(error.message);
         });
+    }
 }
