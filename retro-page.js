@@ -83,14 +83,6 @@ function getUserData() {
                     downloadButton.style.display = 'block';
                     downloadButton.href = data.url;      
                 }
-                // user has not yet bought this retro
-                else {
-                    const buyButton = document.getElementById('buy-retro');
-                    spinner.classList.remove('show');
-                    buyButton.classList.remove('hidden')
-                    buyButton.style.display = 'block';
-                    buyButton.addEventListener('click', buyRetro);
-                }
                 setCounter(data.totalPurchases, data.purchasesThisMonth);
             }).catch((error) => {
             console.error(error.message);
@@ -108,20 +100,42 @@ function setCounter(totalPurchases, purchasesThisMonth) {
 
     if (userPlan === PREMIUM_PLAN) {
         const purchasesLeftThisMonth = Math.max(5 - purchasesThisMonth, 0);
+        console.log("month", purchasesLeftThisMonth);
         purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${purchasesLeftThisMonth} Retros herunterladen.`
         
-        // show single buy button only when no credits left AND when user has not yet bought retro
-        if (purchasesLeftThisMonth === 0 && !alreadyBought) {
-            createPaymentLink();
+        // show buy button if credits left
+        if (purchasesLeftThisMonth > 0) {
+            const buyButton = document.getElementById('buy-retro');
+            spinner.classList.remove('show');
+            buyButton.classList.remove('hidden')
+            buyButton.style.display = 'block';
+            buyButton.addEventListener('click', buyRetro);
+        } 
+        else {
+            // show single buy button only when no credits left AND when user has not yet bought retro
+            if (!alreadyBought) {
+                createPaymentLink();
+            }
         }
     }
     else if (userPlan === FREEMIUM_PLAN) {
         const purchasesLeft = Math.max(3 - totalPurchases, 0);
+        console.log("total", purchasesLeft);
         purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${purchasesLeft} Retros herunterladen.`
         
-        // show single buy button only when no credits left AND when user has not yet bought retro
-        if (totalPurchases === 0 && !alreadyBought) {
-            createPaymentLink();
+        // show buy button if credits left
+        if (purchasesLeft > 0) {
+            const buyButton = document.getElementById('buy-retro');
+            spinner.classList.remove('show');
+            buyButton.classList.remove('hidden')
+            buyButton.style.display = 'block';
+            buyButton.addEventListener('click', buyRetro);
+        } 
+        else {
+            // show single buy button only when no credits left AND when user has not yet bought retro
+            if (!alreadyBought) {
+                createPaymentLink();
+            }
         }
     }
 }
