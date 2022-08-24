@@ -1,10 +1,12 @@
 "use strict";
 
+let userId;
+let sender;
+
 MemberStack.onReady.then(function(member) {   
 	if (member.loggedIn) {
-        console.log(member["id"]);
         userId = member["id"];
-        userPlan = member.membership["id"];
+        sender = member["email"]
 	}
 })
 
@@ -19,37 +21,42 @@ Webflow.push(function() {
   // new form handling
   $('form').submit(function(evt) {
     evt.preventDefault();
-    alert("Your custom action here");
-    sumbmitInvite();
+    const recipient = evt.target.email.value;
+    
+    if (recipient.split('@')[1] === sender.split('@')[1]) {
+      sumbmitInvite(recipient);
+    }
+    else {
+      alert('Die Domain der eingegebenen E-Mail stimmt nicht mit der eigenen überein.');
+    }
   });
 });
 
 
 
-function sumbmitInvite() {
+function sumbmitInvite(recipient) {
     const token = MemberStack.getToken();
+    const requestData = { sender: sender, recipient: recipient }
 
     if (userId && token) {
-        alert("Invite");
-        // fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/voucher-request`, {
-        // method: 'POST', 
-        // headers: {
-        //     'Content-Type': 'application/json',
-        //     'Authorization': `Bearer ${token}`,
-        // },
-        // body: { sender: string, recipient: string},
-        // }).then((response) => {
-        //     if (response.ok) {
-                
-        //     } 
-        //     throw new Error(response.message);
-        // }).then((data) => {
-
-        //     if (data) {
-
-        //     }
-        // }).catch((error) => {
-        //     console.error(error.message);
-        // });
+        fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/voucher-request`, {
+        method: 'POST', 
+        headers: {
+            'Content-Type': 'application/json',
+            //'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestData),
+        }).then((response) => {
+            if (response.ok) {
+                document.getElementById('success_message').classList.remove('hidden');
+                document.getElementById('send_invite_button').classList.add('hidden');
+            } 
+            else {
+              throw new Error(response.message);
+            }
+        }).catch((error) => {
+          document.getElementById('error_message').classList.remove('hidden');
+          console.error(error.message);
+        });
     }
 }
