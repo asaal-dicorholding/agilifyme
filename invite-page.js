@@ -37,26 +37,29 @@ Webflow.push(function() {
 function sumbmitInvite(recipient) {
     const token = MemberStack.getToken();
     const requestData = { sender: sender, recipient: recipient }
+    const button = document.getElementById('send_invite_button');
 
     if (userId && token) {
-        fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/voucher-request`, {
-        method: 'POST', 
-        headers: {
-            'Content-Type': 'application/json',
-            //'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(requestData),
-        }).then((response) => {
-            if (response.ok) {
-                document.getElementById('success_message').classList.remove('hidden');
-                document.getElementById('send_invite_button').classList.add('hidden');
-            } 
-            else {
-              throw new Error(response.message);
-            }
-        }).catch((error) => {
-          document.getElementById('error_message').classList.remove('hidden');
-          console.error(error.message);
-        });
+      button.disabled = true;
+
+      fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/voucher-request`, {
+      method: 'POST', 
+      headers: {
+          'Content-Type': 'application/json',
+          //'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(requestData),
+      }).then((response) => {
+          if (response.ok) {
+              document.getElementById('success_message').classList.remove('hidden');
+              button.classList.add('hidden');
+          } 
+          else {
+            throw new Error(response.message);
+          }
+      }).catch((error) => {
+        document.getElementById('error_message').classList.remove('hidden');
+        console.error(error.message);
+      });
     }
 }
