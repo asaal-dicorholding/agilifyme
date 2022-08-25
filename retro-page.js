@@ -117,7 +117,9 @@ function setCounter(totalPurchases, purchasesThisMonth) {
         else {
             // show single buy button only when no credits left AND when user has not yet bought retro
             if (!alreadyBought) {
-                createPaymentLink();
+                const createPaymentLinkElement = document.getElementById('create-payment-link');
+                createPaymentLinkElement.classList.remove('hidden');
+                createPaymentLinkElement.addEventListener('click', createPaymentLink);
             }
         }
     }
@@ -136,7 +138,9 @@ function setCounter(totalPurchases, purchasesThisMonth) {
         else {
             // show single buy button only when no credits left AND when user has not yet bought retro
             if (!alreadyBought) {
-                createPaymentLink();
+                const createPaymentLinkElement = document.getElementById('create-payment-link');
+                createPaymentLinkElement.classList.remove('hidden');
+                createPaymentLinkElement.addEventListener('click', createPaymentLink);
             }
         }
     }
@@ -189,32 +193,36 @@ function toggleFavorite() {
     });
 }
 
+/**
+ * calls the backend in order to retrieve a stripe payment link which is then used as link for the single buy button
+ */
 function createPaymentLink() {
     const token = MemberStack.getToken();
 
     if (userId && token) {
-    fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/payment-link/user/${userId}?slug=${productSlug}`, {
-            method: 'GET',
-            headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-            },
-            }).then((response) => {
-                if (response.ok) {
-                    return response.json()
-                }
-                throw new Error(response.message);
-            }).then((data) => {
-                console.log('Success:', data);
-                if (data.url) {
-                    const singleBuyButton = document.getElementById('single-buy-retro');
-                    spinner.classList.remove('show');
-                    singleBuyButton.href = data.url;
-                    singleBuyButton.classList.remove('hidden');
-                    singleBuyButton.style.display = 'block';
-                }
-            }).catch((error) => {
-            console.error(error.message);
-        });
-    }
+        fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/payment-link/user/${userId}?slug=${productSlug}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                }).then((response) => {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    throw new Error(response.message);
+                }).then((data) => {
+                    console.log('Success:', data);
+                    if (data.url) {
+                        document.getElementById('create-payment-link').classList.add('hidden');
+                        const singleBuyButton = document.getElementById('single-buy-retro');
+                        spinner.classList.remove('show');
+                        singleBuyButton.href = data.url;
+                        singleBuyButton.classList.remove('hidden');
+                        singleBuyButton.style.display = 'block';
+                    }
+                }).catch((error) => {
+                console.error(error.message);
+            });
+        }
 }
