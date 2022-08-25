@@ -87,6 +87,7 @@ function getUserData() {
                 }
                 else {
                     setCounter(data.totalPurchases, data.purchasesThisMonth);
+                    spinner.classList.remove('show');
                 }
             }).catch((error) => {
             console.error(error.message);
