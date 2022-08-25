@@ -27,7 +27,10 @@ function init() {
 }
 
 function buyRetro() {
+    document.getElementById('purchases_counter').classList.add('hidden');
+    document.getElementById('buy-retro').classList.add('hidden');
     spinner.classList.add('show');
+
 	const data = { "slug": productSlug };  
     const token = MemberStack.getToken();
   
@@ -53,6 +56,7 @@ function buyRetro() {
             }
         }).catch((error) => {
             console.error(error.message);
+            getUserData();
         });
     }
 }
@@ -112,8 +116,7 @@ function setCounter(totalPurchases, purchasesThisMonth) {
         if (purchasesLeftThisMonth > 0) {
             const buyButton = document.getElementById('buy-retro');
             spinner.classList.remove('show');
-            buyButton.classList.remove('hidden')
-//            buyButton.style.display = 'block';
+            buyButton.classList.remove('hidden');
             buyButton.addEventListener('click', buyRetro);
         } 
         else {
@@ -133,8 +136,7 @@ function setCounter(totalPurchases, purchasesThisMonth) {
         if (purchasesLeft > 0) {
             const buyButton = document.getElementById('buy-retro');
             spinner.classList.remove('show');
-            buyButton.classList.remove('hidden')
-            //buyButton.style.display = 'block';
+            buyButton.classList.remove('hidden');
             buyButton.addEventListener('click', buyRetro);
         } 
         else {
