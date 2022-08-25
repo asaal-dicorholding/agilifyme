@@ -27,6 +27,7 @@ function init() {
 }
 
 function buyRetro() {
+    spinner.classList.add('show');
 	const data = { "slug": productSlug };  
     const token = MemberStack.getToken();
   
@@ -46,9 +47,9 @@ function buyRetro() {
         }).then((data) => {
             console.log('Success:', data);
             if (data) {
-                // TODO: add spinner while buying process
-                // TODO: resolve without reload
-                window.location.reload();
+                document.getElementById('purchases_counter').classList.add('hidden');
+                document.getElementById('buy-retro').classList.add('hidden');
+                getUserData();
             }
         }).catch((error) => {
             console.error(error.message);
