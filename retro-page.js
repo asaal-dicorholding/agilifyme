@@ -134,7 +134,7 @@ function setCounter(totalPurchases, purchasesThisMonth) {
             const buyButton = document.getElementById('buy-retro');
             spinner.classList.remove('show');
             buyButton.classList.remove('hidden')
-            buyButton.style.display = 'block';
+            //buyButton.style.display = 'block';
             buyButton.addEventListener('click', buyRetro);
         } 
         else {
