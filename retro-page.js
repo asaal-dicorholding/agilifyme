@@ -80,11 +80,10 @@ function getUserData() {
                 // user has already bought this retro
                 if (data.url) {
                     alreadyBought = true;
+                    document.getElementById('download-section').classList.remove('hidden');
                     const downloadButton = document.getElementById('download-retro');
                     spinner.classList.remove('show');
-                    downloadButton.classList.remove('hidden');
-                    downloadButton.style.display = 'block';
-                    downloadButton.href = data.url;      
+                    downloadButton.href = data.url;
                 }
                 else {
                     setCounter(data.totalPurchases, data.purchasesThisMonth);
