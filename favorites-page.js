@@ -2,13 +2,17 @@
 
 let userId;
 
-MemberStack.onReady.then(async(member) => {   
-	if (member.loggedIn) {
-        const metadata = await member.getMetaData(); 
-        const favorites = metadata.favorites || []; 
-        removeNonFavoriteRetros(favorites);
-	}
-})
+document.addEventListener("DOMContentLoaded", init);
+
+function init() {
+    MemberStack.onReady.then(async(member) => {   
+        if (member.loggedIn) {
+            const metadata = await member.getMetaData(); 
+            const favorites = metadata.favorites || []; 
+            removeNonFavoriteRetros(favorites);
+        }
+    })
+}
 
 function removeNonFavoriteRetros(favorites) {
     const allRetroElements = document.querySelectorAll('p[role="id_finder"]');
