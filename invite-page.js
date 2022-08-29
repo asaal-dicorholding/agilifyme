@@ -12,8 +12,8 @@ Webflow.push(function() {
   $('form').submit(function(evt) {
 
     evt.preventDefault();
-    const recipient = evt.target['Eingeladener-Nutzer']?.value;
-    const sender = evt.target['Nutzer']?.value;
+    const recipient = evt.target['invitedEmail']?.value;
+    const sender = evt.target['email']?.value;
     
     if (recipient && sender) {
       if (recipient.split('@')[1] === sender.split('@')[1]) {
