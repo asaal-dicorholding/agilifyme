@@ -32,6 +32,9 @@ function getUserData() {
             throw new Error(response.message);
             })
         .then((data) => {
+            if (!data.purchases.length) {
+                document.getElementsByID('no-purchases').classList.remove('hidden');
+            }
             removeNonPurchasedRetros(data.purchases);
             const purchasedRetros = document.getElementById('my-retros');
             const spinner = document.getElementById('spinner');
@@ -49,6 +52,8 @@ function getUserData() {
 
 function removeNonPurchasedRetros(purchases) {
     const allRetroElements = document.querySelectorAll('p[role="id_finder"]');
+
+
     const allRetroSlugs = [];
 
     allRetroElements.forEach(el => {

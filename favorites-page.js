@@ -9,6 +9,9 @@ function init() {
         if (member.loggedIn) {
             const metadata = await member.getMetaData(); 
             const favorites = metadata.favorites || []; 
+            if (!favorites.length) {
+                document.getElementsByID('no-favorites').classList.remove('hidden');
+            }
             removeNonFavoriteRetros(favorites);
         }
     })
