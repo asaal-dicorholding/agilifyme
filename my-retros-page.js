@@ -33,7 +33,7 @@ function getUserData() {
             })
         .then((data) => {
             if (!data.purchases.length) {
-                document.getElementsByID('no-purchases').classList.remove('hidden');
+                document.getElementById('no-purchases').classList.remove('hidden');
             }
             removeNonPurchasedRetros(data.purchases);
             const purchasedRetros = document.getElementById('my-retros');

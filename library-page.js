@@ -47,11 +47,11 @@ function setCounter(totalPurchases, purchasesThisMonth) {
     const purchasesCounter = document.getElementById('purchases_counter');
 
     if (userPlan === PREMIUM_PLAN) {
-        const purchasesLeftThisMonth = 5 - purchasesThisMonth;
+        const purchasesLeftThisMonth = Math.max(5 - purchasesThisMonth, 0);
         purchasesCounter.innerText = `${purchasesLeftThisMonth} Downloads frei`
     }
     else if (userPlan === FREEMIUM_PLAN) {
-        const purchasesLeft = 3 - totalPurchases;
+        const purchasesLeft = Math.max(3 - totalPurchases, 0);
         purchasesCounter.innerText = `${purchasesLeft} Downloads frei`
     }
 }
