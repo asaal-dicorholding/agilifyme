@@ -13,7 +13,7 @@ Webflow.push(function() {
 
     evt.preventDefault();
     const recipient = evt.target['invitedEmail']?.value;
-    const sender = evt.target['email']?.value;
+    const sender = evt.target['userEmail']?.value; console.log(sender);
     
     if (recipient && sender) {
       if (recipient.split('@')[1] === sender.split('@')[1]) {
