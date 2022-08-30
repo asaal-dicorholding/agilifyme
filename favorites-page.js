@@ -1,5 +1,6 @@
 "use strict";
 
+const PREMIUM_PLAN = '62e286ce155f7600049ab645';
 let userId;
 
 document.addEventListener("DOMContentLoaded", init);
@@ -7,6 +8,7 @@ document.addEventListener("DOMContentLoaded", init);
 function init() {
     MemberStack.onReady.then(async(member) => {   
         if (member.loggedIn) {
+            if (userPlan === PREMIUM_PLAN) checkProfileData(member);
             const metadata = await member.getMetaData(); 
             const favorites = metadata.favorites || []; 
             if (!favorites.length) {
@@ -15,6 +17,10 @@ function init() {
             removeNonFavoriteRetros(favorites);
         }
     })
+}
+
+function checkProfileData(member) {
+    if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning').classList.remove('hidden');
 }
 
 function removeNonFavoriteRetros(favorites) {

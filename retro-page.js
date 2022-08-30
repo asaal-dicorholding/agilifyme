@@ -12,11 +12,15 @@ let spinner;
 
 MemberStack.onReady.then(function(member) {   
 	if (member.loggedIn) {
-        console.log(member["id"]);
         userId = member["id"];
         userPlan = member.membership["id"];
+        if (userPlan === PREMIUM_PLAN) checkProfileData(member);
 	}
 })
+
+function checkProfileData(member) {
+    if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning').classList.remove('hidden');
+}
 
 document.addEventListener("DOMContentLoaded", init);
 
