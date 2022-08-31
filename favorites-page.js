@@ -13,8 +13,9 @@ function init() {
             if (userPlan === PREMIUM_PLAN) checkProfileData(member);
             const metadata = await member.getMetaData(); 
             const favorites = metadata.favorites || []; 
-            
+
             if (!favorites.length) {
+                document.getElementById('spinner').classList.remove('show');
                 document.getElementById('no-favorites').classList.remove('hidden');
             }
             removeNonFavoriteRetros(favorites);
@@ -45,4 +46,6 @@ function removeNonFavoriteRetros(favorites) {
             }
         }        
     });
+    document.getElementById('spinner').classList.remove('show');
+    document.getElementById('retro-wrapper').classList.remove('hidden');
 }
