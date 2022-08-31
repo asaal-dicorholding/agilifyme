@@ -22,11 +22,11 @@ function init() {
             userId = member["id"];
             userPlan = member.membership["id"];
             if (userPlan === PREMIUM_PLAN) checkProfileData(member);
+            spinner = document.getElementById('spinner');
+	        getUserData();
+            markAsFavorite();
         }
     })
-    spinner = document.getElementById('spinner');
-	getUserData();
-    markAsFavorite();
 }
 
 function buyRetro() {

@@ -16,9 +16,9 @@ function init() {
             const userPlan = member.membership["id"];
     
             if (userPlan === PREMIUM_PLAN) checkProfileData(member);
+            getUserData();
         }
     })
-	getUserData();
 }
 
 function getUserData() {

@@ -19,10 +19,9 @@ function init() {
           userPlan = member.membership["id"];
   
           if (userPlan === PREMIUM_PLAN) checkProfileData(member);
+          getUserData();
     }
   })
-	getUserData();
-  // TODO: add event listener to heart button/image
 }
 
 function getUserData() {
