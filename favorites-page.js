@@ -8,9 +8,12 @@ document.addEventListener("DOMContentLoaded", init);
 function init() {
     MemberStack.onReady.then(async(member) => {   
         if (member.loggedIn) {
+            const userPlan = member.membership["id"];
+
             if (userPlan === PREMIUM_PLAN) checkProfileData(member);
             const metadata = await member.getMetaData(); 
             const favorites = metadata.favorites || []; 
+            
             if (!favorites.length) {
                 document.getElementById('no-favorites').classList.remove('hidden');
             }

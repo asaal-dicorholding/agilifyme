@@ -3,14 +3,6 @@
 const PREMIUM_PLAN = '62e286ce155f7600049ab645';
 let userId;
 
-MemberStack.onReady.then(function(member) {   
-	if (member.loggedIn) {
-        userId = member["id"];
-
-        if (userPlan === PREMIUM_PLAN) checkProfileData(member);
-	}
-})
-
 function checkProfileData(member) {
     if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning').classList.remove('hidden');
 }
@@ -18,6 +10,14 @@ function checkProfileData(member) {
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
+    MemberStack.onReady.then(function(member) {   
+        if (member.loggedIn) {
+            userId = member["id"];
+            const userPlan = member.membership["id"];
+    
+            if (userPlan === PREMIUM_PLAN) checkProfileData(member);
+        }
+    })
 	getUserData();
 }
 
