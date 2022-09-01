@@ -10,10 +10,6 @@ let userPlan;
 let alreadyBought = false;
 let spinner;
 
-function checkProfileData(member) {
-    if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning').classList.remove('hidden');
-}
-
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
@@ -21,7 +17,6 @@ function init() {
         if (member.loggedIn) {
             userId = member["id"];
             userPlan = member.membership["id"];
-            if (userPlan === PREMIUM_PLAN) checkProfileData(member);
             spinner = document.getElementById('spinner');
 	        getUserData();
             markAsFavorite();
