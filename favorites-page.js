@@ -19,6 +19,7 @@ function init() {
                 document.getElementById('no-favorites').classList.remove('hidden');
             }
             removeNonFavoriteRetros(favorites);
+
         }
     })
 }
@@ -49,3 +50,17 @@ function removeNonFavoriteRetros(favorites) {
     document.getElementById('spinner').classList.remove('show');
     document.getElementById('retro-wrapper').classList.remove('hidden');
 }
+
+function removeFavorite(slug) {
+    MemberStack.onReady.then(async (member) => { 
+        const metadata = await member.getMetaData(); 
+        const favorites = metadata.favorites || []; 
+        const index = favorites.indexOf(slug);
+  
+        if (index > -1) {
+            favorites.splice(index, 1);
+            member.updateMetaData({favorites: favorites});
+            removeNonFavoriteRetros(favorites);
+        }
+    });
+  }
