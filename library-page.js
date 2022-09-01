@@ -79,7 +79,7 @@ function markFavorites() {
         const img = document.getElementById(`favorite_${slug}`);
         
         if (img) {
-          img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf457b9ed32e24caa34_ri_heart-fill.svg";
+          img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
         }
       })
   });
@@ -104,7 +104,7 @@ function toggleFavorite(slug) {
         const img = document.getElementById(`favorite_${slug}`);
         
         if (img) {
-          img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf457b9ed32e24caa34_ri_heart-fill.svg";
+          img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
         }
       }
       member.updateMetaData({favorites: favorites}) 
