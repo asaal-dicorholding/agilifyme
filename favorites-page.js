@@ -49,6 +49,8 @@ function removeNonFavoriteRetros(favorites) {
     });
     document.getElementById('spinner').classList.remove('show');
     document.getElementById('retro-wrapper').classList.remove('hidden');
+
+    if (favorites.length === 0) document.getElementById('no-favorites').classList.remove('hidden');
 }
 
 function removeFavorite(slug) {
