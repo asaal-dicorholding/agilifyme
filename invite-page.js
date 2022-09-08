@@ -1,17 +1,15 @@
 "use strict";
 
-const PREMIUM_PLAN = '62e286ce155f7600049ab645';
+const PREMIUM_PLAN = 'pln_premium-plan-3a1gw084x';
 
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
-  MemberStack.onReady.then(function(member) {   
-    if (member.loggedIn) {
-          const userPlan = member.membership["id"];
-          
-          if (userPlan === PREMIUM_PLAN) checkProfileData(member);
-    }
-  })
+  const memberstack = window.$memberstackDom;
+  const { data: member } = await memberstack.getCurrentMember();
+  const userPlan = member.planConnections[0].planId;
+  
+  if (userPlan === PREMIUM_PLAN) checkProfileData(member.customFields);
 }
 
 function checkProfileData(member) {

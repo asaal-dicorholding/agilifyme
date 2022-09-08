@@ -1,27 +1,35 @@
 "use strict";
 
-const PREMIUM_PLAN = '62e286ce155f7600049ab645';
+const PREMIUM_PLAN = 'pln_premium-plan-3a1gw084x';
 let userId;
+let memberstack;
 
 document.addEventListener("DOMContentLoaded", init);
 
-function init() {
-    MemberStack.onReady.then(async(member) => {   
-        if (member.loggedIn) {
-            const userPlan = member.membership["id"];
+async function init() {
+    memberstack = window.$memberstackDom;
+    const { data: member } = await memberstack.getCurrentMember();
+  
+    if (isPremiumMember(member.planConnections)) checkProfileData(member.customFields);
 
-            if (userPlan === PREMIUM_PLAN) checkProfileData(member);
-            const metadata = await member.getMetaData(); 
-            const favorites = metadata.favorites || []; 
+    const { data: jsonData } = await memberstack.getMemberJSON();
+    const favorites = jsonData?.favorites || []; 
 
-            if (!favorites.length) {
-                document.getElementById('spinner').classList.remove('show');
-                document.getElementById('no-favorites').classList.remove('hidden');
-            }
-            removeNonFavoriteRetros(favorites);
+    if (!favorites.length) {
+        document.getElementById('spinner').classList.remove('show');
+        document.getElementById('no-favorites').classList.remove('hidden');
+    }
+    removeNonFavoriteRetros(favorites);
+}
 
-        }
-    })
+function isPremiumMember(planConnections) {
+    let result = false;
+
+    planConnections.forEach(plan => {
+        if (plan.active && plan.planId === PREMIUM_PLAN) result = true;
+    });
+
+    return result;
 }
 
 function checkProfileData(member) {
@@ -53,16 +61,14 @@ function removeNonFavoriteRetros(favorites) {
     if (favorites.length === 0) document.getElementById('no-favorites').classList.remove('hidden');
 }
 
-function removeFavorite(slug) {
-    MemberStack.onReady.then(async (member) => { 
-        const metadata = await member.getMetaData(); 
-        const favorites = metadata.favorites || []; 
-        const index = favorites.indexOf(slug);
-  
-        if (index > -1) {
-            favorites.splice(index, 1);
-            member.updateMetaData({favorites: favorites});
-            removeNonFavoriteRetros(favorites);
-        }
-    });
-  }
+async function removeFavorite(slug) {
+    const { data: jsonData } = await memberstack.getMemberJSON();
+    const favorites = jsonData?.favorites || [];
+    const index = favorites.indexOf(slug);
+
+    if (index > -1) {
+        favorites.splice(index, 1);
+        memberstack.updateMemberJSON({ json: { favorites: favorites } }) ;
+        removeNonFavoriteRetros(favorites);
+    }    
+}

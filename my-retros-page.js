@@ -1,7 +1,8 @@
 "use strict";
 
-const PREMIUM_PLAN = '62e286ce155f7600049ab645';
+const PREMIUM_PLAN = 'pln_premium-plan-3a1gw084x';
 let userId;
+let memberstack;
 
 function checkProfileData(member) {
     if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning').classList.remove('hidden');
@@ -9,27 +10,35 @@ function checkProfileData(member) {
 
 document.addEventListener("DOMContentLoaded", init);
 
-function init() {
-    MemberStack.onReady.then(function(member) {   
-        if (member.loggedIn) {
-            userId = member["id"];
-            const userPlan = member.membership["id"];
-    
-            if (userPlan === PREMIUM_PLAN) checkProfileData(member);
-            getUserData();
-        }
-    })
+async function init() {
+    memberstack = window.$memberstackDom;
+    const { data: member } = await memberstack.getCurrentMember();
+    userId = member.id;
+  
+    if (isPremiumMember(member.planConnections)) checkProfileData(member.customFields);
+    getUserData();
+}
+
+function isPremiumMember(planConnections) {
+    let result = false;
+
+    planConnections.forEach(plan => {
+        if (plan.active && plan.planId === PREMIUM_PLAN) result = true;
+    });
+
+    return result;
 }
 
 function getUserData() {
-	const token = MemberStack.getToken();
+	const token = memberstack.getMemberCookie();
     
 	if (userId && token) {
-        fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/user/${userId}`, {
+        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/v1/user/${userId}`, {
             method: 'GET',
             headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
+            'X-API-KEY': 'X1TzzImCOV773jjVVxRla6bf3jY7huLI4R9vFiXc',
             },
         })
         .then((response) => {

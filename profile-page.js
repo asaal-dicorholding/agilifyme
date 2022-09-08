@@ -1,23 +1,26 @@
 "use strict";
 
-const PREMIUM_PLAN = '62e286ce155f7600049ab645';
+const PREMIUM_PLAN = 'pln_premium-plan-3a1gw084x';
 
 document.addEventListener("DOMContentLoaded", init);
 
-function init() {
-    MemberStack.onReady.then(function(member) {   
-        if (member.loggedIn) {
-            const userPlan = member.membership["id"];
-
-            if (userPlan === PREMIUM_PLAN) {
-                checkProfileData(member);
-            } 
-            else {
-                removeRequiredAttributes();
-            }
-        }
-    })    
+async function init() {
+    const memberstack = window.$memberstackDom;
+    const { data: member } = await memberstack.getCurrentMember();
+  
+    isPremiumMember(member.planConnections) ? checkProfileData(member.customFields) : removeRequiredAttributes();
 }
+
+function isPremiumMember(planConnections) {
+    let result = false;
+
+    planConnections.forEach(plan => {
+        if (plan.active && plan.planId === PREMIUM_PLAN) result = true;
+    });
+
+    return result;
+}
+  
 
 function checkProfileData(member) {
     if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning-message').classList.remove('hidden');

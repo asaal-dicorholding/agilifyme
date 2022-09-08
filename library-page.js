@@ -1,10 +1,11 @@
 "use strict";
 
-const FREEMIUM_PLAN = '62f4ec45de6d360004a97625';
-const PREMIUM_PLAN = '62e286ce155f7600049ab645';
+const PREMIUM_PLAN = 'pln_premium-plan-3a1gw084x';
+const FREEMIUM_PLAN= 'pln_freemium-plan-y91h108t5';
 
 let userId;
-let userPlan;
+let isPremiumMember = false;
+let memberstack;
 
 function checkProfileData(member) {
   if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning').classList.remove('hidden');
@@ -12,27 +13,32 @@ function checkProfileData(member) {
 
 document.addEventListener("DOMContentLoaded", init);
 
-function init() {
-  MemberStack.onReady.then(function(member) {   
-    if (member.loggedIn) {
-          userId = member["id"];
-          userPlan = member.membership["id"];
-  
-          if (userPlan === PREMIUM_PLAN) checkProfileData(member);
-          getUserData();
-    }
+async function init() {
+  memberstack = window.$memberstackDom;
+  const { data: member } = await memberstack.getCurrentMember();
+  userId = member.id;
+  setUserPlan(member.planConnections);
+
+  if (isPremiumMember) checkProfileData(member.customFields);
+  getUserData();
+}
+
+function setUserPlan(planConnections) {
+  planConnections.forEach(plan => {
+      if (plan.active && plan.planId === PREMIUM_PLAN) isPremiumMember = true;
   })
 }
 
 function getUserData() {
-	const token = MemberStack.getToken();
+	const token = memberstack.getMemberCookie();
   
 	if (userId && token) {
-    fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/user/${userId}`, {
+    fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/v1/user/${userId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`,
+      'X-API-KEY': 'X1TzzImCOV773jjVVxRla6bf3jY7huLI4R9vFiXc',
     },
   })
   .then((response) => response.json())
@@ -50,11 +56,11 @@ function getUserData() {
 function setCounter(totalPurchases, purchasesThisMonth) {
     const purchasesCounter = document.getElementById('purchases_counter');
 
-    if (userPlan === PREMIUM_PLAN) {
+    if (isPremiumMember) {
         const purchasesLeftThisMonth = Math.max(5 - purchasesThisMonth, 0);
         purchasesCounter.innerText = `${purchasesLeftThisMonth} Downloads frei`
     }
-    else if (userPlan === FREEMIUM_PLAN) {
+    else {
         const purchasesLeft = Math.max(3 - totalPurchases, 0);
         purchasesCounter.innerText = `${purchasesLeft} Downloads frei`
     }
@@ -70,43 +76,39 @@ function setPurchasedTags(purchases) {
     });
 }
 
-function markFavorites() {
-  MemberStack.onReady.then(async (member) => { 
-      const metadata = await member.getMetaData(); 
-      const favorites = metadata.favorites || []; 
-      
-      favorites.forEach(slug => {
-        const img = document.getElementById(`favorite_${slug}`);
-        
-        if (img) {
-          img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
-        }
-      })
-  });
+async function markFavorites() {
+  const { data: jsonData } = await memberstack.getMemberJSON();
+  const favorites = jsonData?.favorites || []; 
+
+  favorites.forEach(slug => {
+    const img = document.getElementById(`favorite_${slug}`);
+    
+    if (img) {
+      img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
+    }
+  })
 }
 
-function toggleFavorite(slug) {
-  MemberStack.onReady.then(async (member) => { 
-      const metadata = await member.getMetaData(); 
-      const favorites = metadata.favorites || []; 
-      const index = favorites.indexOf(slug);
+async function toggleFavorite(slug) {
+  const { data: jsonData } = await memberstack.getMemberJSON();
+  const favorites = jsonData?.favorites || [];
+  const index = favorites.indexOf(slug);
 
-      if (index > -1) {
-        favorites.splice(index, 1);
-        const img = document.getElementById(`favorite_${slug}`);
-        
-        if (img) {
-          img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf454fbe1866509a97e_ri_heart-line.svg";
-        }
-      }
-      else {
-        favorites.push(slug);
-        const img = document.getElementById(`favorite_${slug}`);
-        
-        if (img) {
-          img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
-        }
-      }
-      member.updateMetaData({favorites: favorites}) 
-  });
+  if (index > -1) {
+    favorites.splice(index, 1);
+    const img = document.getElementById(`favorite_${slug}`);
+    
+    if (img) {
+      img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf454fbe1866509a97e_ri_heart-line.svg";
+    }
+  }
+  else {
+    favorites.push(slug);
+    const img = document.getElementById(`favorite_${slug}`);
+    
+    if (img) {
+      img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
+    }
+  }
+  memberstack.updateMemberJSON({ json: { favorites: favorites } }) ;
 }

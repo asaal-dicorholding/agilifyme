@@ -1,26 +1,32 @@
 "use strict";
 
-const FREEMIUM_PLAN = '62f4ec45de6d360004a97625';
-const PREMIUM_PLAN = '62e286ce155f7600049ab645';
+const PREMIUM_PLAN = 'pln_premium-plan-3a1gw084x';
+const FREEMIUM_PLAN= 'pln_freemium-plan-y91h108t5';
 
 const productSlug = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
 
 let userId;
-let userPlan;
+let isPremiumMember = false;
 let alreadyBought = false;
 let spinner;
+let memberstack;
 
 document.addEventListener("DOMContentLoaded", init);
 
-function init() {
-    MemberStack.onReady.then(function(member) {   
-        if (member.loggedIn) {
-            userId = member["id"];
-            userPlan = member.membership["id"];
-            spinner = document.getElementById('spinner');
-	        getUserData();
-            markAsFavorite();
-        }
+async function init() {
+    memberstack = window.$memberstackDom;
+    const { data: member } = await memberstack.getCurrentMember();
+
+    userId = member.id;
+    setUserPlan(member.planConnections);
+    spinner = document.getElementById('spinner');
+    getUserData();
+    markAsFavorite();
+}
+
+function setUserPlan(planConnections) {
+    planConnections.forEach(plan => {
+        if (plan.active && plan.planId === PREMIUM_PLAN) isPremiumMember = true;
     })
 }
 
@@ -30,14 +36,15 @@ function buyRetro() {
     spinner.classList.add('show');
 
 	const data = { "slug": productSlug };  
-    const token = MemberStack.getToken();
+    const token = memberstack.getMemberCookie();
   
     if (userId && token) {
-        fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/user/${userId}`, {
+        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/v1/user/${userId}`, {
         method: 'PUT', 
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
+            'X-API-KEY': 'X1TzzImCOV773jjVVxRla6bf3jY7huLI4R9vFiXc',
         },
         body: JSON.stringify(data),
         }).then((response) => {
@@ -63,14 +70,15 @@ function buyRetro() {
  * fetches user data including made purchases from the backend
  */
 function getUserData() {
-	const token = MemberStack.getToken();
+	const token = memberstack.getMemberCookie();
   
 	if (userId && token) {
-        fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/retro/user/${userId}?slug=${productSlug}`, {
+        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/v1/retro-url/user/${userId}?slug=${productSlug}`, {
             method: 'GET',
             headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`,
+            'X-API-KEY': 'X1TzzImCOV773jjVVxRla6bf3jY7huLI4R9vFiXc',
             },
             }).then((response) => {
                 if (response.ok) {
@@ -106,7 +114,7 @@ function getUserData() {
 function setCounter(totalPurchases, purchasesThisMonth) {
     const purchasesCounter = document.getElementById('purchases_counter');
 
-    if (userPlan === PREMIUM_PLAN) {
+    if (isPremiumMember) {
         const purchasesLeftThisMonth = Math.max(5 - purchasesThisMonth, 0);
         purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${purchasesLeftThisMonth} Retros herunterladen.`
         
@@ -126,7 +134,7 @@ function setCounter(totalPurchases, purchasesThisMonth) {
             }
         }
     }
-    else if (userPlan === FREEMIUM_PLAN) {
+    else {
         const purchasesLeft = Math.max(3 - totalPurchases, 0);
         purchasesCounter.innerHTML = `Du kannst mit deinem derzeitigen Abonnement noch ${purchasesLeft} Retros herunterladen.`
         
@@ -151,48 +159,44 @@ function setCounter(totalPurchases, purchasesThisMonth) {
 /**
  * fills the heart icon when the slugId of the current retro is found in the user's favorites
  */
-function markAsFavorite() {
-    MemberStack.onReady.then(async (member) => { 
-        const metadata = await member.getMetaData(); 
-        const favorites = metadata.favorites || []; 
+async function markAsFavorite() {
+    const { data: jsonData } = await memberstack.getMemberJSON();
+    const favorites = jsonData?.favorites || []; 
   
-        if (favorites.indexOf(productSlug) > -1) {
-            const img = document.getElementById(`favorite_${productSlug}`);
-        
-            if (img) {
-                img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
-            }
+    if (favorites.indexOf(productSlug) > -1) {
+        const img = document.getElementById(`favorite_${productSlug}`);
+    
+        if (img) {
+            img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
         }
-    });
+    }
 }
 
 /**
  * adds or removes slugId from memberstack metadata and fills or empties heart icon to visualize the current status 
  */
-function toggleFavorite() {
-    MemberStack.onReady.then(async (member) => { 
-        const metadata = await member.getMetaData(); 
-        const favorites = metadata.favorites || []; 
-        const index = favorites.indexOf(productSlug);
-  
-        if (index > -1) {
-            favorites.splice(index, 1);
-            const img = document.getElementById(`favorite_${productSlug}`);
+async function toggleFavorite() {
+    const { data: jsonData } = await memberstack.getMemberJSON();
+    const favorites = jsonData?.favorites || [];
+    const index = favorites.indexOf(slug);
+
+    if (index > -1) {
+        favorites.splice(index, 1);
+        const img = document.getElementById(`favorite_${productSlug}`);
         
-            if (img) {
-                img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf454fbe1866509a97e_ri_heart-line.svg";
-            }
+        if (img) {
+        img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf454fbe1866509a97e_ri_heart-line.svg";
         }
-        else {
-            favorites.push(productSlug);
-            const img = document.getElementById(`favorite_${productSlug}`);
+    }
+    else {
+        favorites.push(slug);
+        const img = document.getElementById(`favorite_${productSlug}`);
         
-            if (img) {
-                img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
-            }
+        if (img) {
+        img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
         }
-        member.updateMetaData({favorites: favorites}) 
-    });
+    }
+    memberstack.updateMemberJSON({ json: { favorites: favorites } }) ;
 }
 
 /**
@@ -202,11 +206,12 @@ function createPaymentLink() {
     const token = MemberStack.getToken();
 
     if (userId && token) {
-        fetch(`https://hnva3v8a12.execute-api.eu-west-2.amazonaws.com/test/payment-link/user/${userId}?slug=${productSlug}`, {
+        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/v1/payment-link/user/${userId}?slug=${productSlug}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
+                    'X-API-KEY': 'X1TzzImCOV773jjVVxRla6bf3jY7huLI4R9vFiXc',
                 },
                 }).then((response) => {
                     if (response.ok) {
