@@ -4,12 +4,21 @@ const PREMIUM_PLAN = 'pln_premium-plan-3a1gw084x';
 
 document.addEventListener("DOMContentLoaded", init);
 
-function init() {
+async function init() {
   const memberstack = window.$memberstackDom;
   const { data: member } = await memberstack.getCurrentMember();
-  const userPlan = member.planConnections[0].planId;
   
-  if (userPlan === PREMIUM_PLAN) checkProfileData(member.customFields);
+  if (isPremiumMember(member.planConnections)) checkProfileData(member.customFields);
+}
+
+function isPremiumMember(planConnections) {
+  let result = false;
+
+  planConnections.forEach(plan => {
+      if (plan.active && plan.planId === PREMIUM_PLAN) result = true;
+  });
+
+  return result;
 }
 
 function checkProfileData(member) {
