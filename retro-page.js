@@ -203,7 +203,7 @@ async function toggleFavorite() {
  * calls the backend in order to retrieve a stripe payment link which is then used as link for the single buy button
  */
 function createPaymentLink() {
-    const token = MemberStack.getToken();
+    const token = memberstack.getMemberCookie();
 
     if (userId && token) {
         fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/v1/payment-link/user/${userId}?slug=${productSlug}`, {
