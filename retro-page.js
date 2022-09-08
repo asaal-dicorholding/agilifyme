@@ -189,7 +189,7 @@ async function toggleFavorite() {
         }
     }
     else {
-        favorites.push(slug);
+        favorites.push(productSlug);
         const img = document.getElementById(`favorite_${productSlug}`);
         
         if (img) {
