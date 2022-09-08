@@ -178,7 +178,7 @@ async function markAsFavorite() {
 async function toggleFavorite() {
     const { data: jsonData } = await memberstack.getMemberJSON();
     const favorites = jsonData?.favorites || [];
-    const index = favorites.indexOf(slug);
+    const index = favorites.indexOf(productSlug);
 
     if (index > -1) {
         favorites.splice(index, 1);
