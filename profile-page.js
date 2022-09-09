@@ -36,7 +36,7 @@ function removeRequiredAttributes() {
 }
 
 var Webflow = Webflow || [];
-Webflow.push(function() {
+Webflow.push(async function() {
 
   // === Custom Form Handling ===
   
