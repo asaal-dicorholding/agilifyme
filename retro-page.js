@@ -151,6 +151,8 @@ function setCounter(totalPurchases, purchasesThisMonth) {
                 const createPaymentLinkElement = document.getElementById('create-payment-link');
                 createPaymentLinkElement.classList.remove('hidden');
                 createPaymentLinkElement.addEventListener('click', createPaymentLink);
+            } else {
+                document.getElementById('singlebuy-info').classList.add('hidden');
             }
         }
     }
