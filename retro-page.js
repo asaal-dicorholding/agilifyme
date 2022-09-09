@@ -132,6 +132,9 @@ function setCounter(totalPurchases, purchasesThisMonth) {
                 createPaymentLinkElement.classList.remove('hidden');
                 createPaymentLinkElement.addEventListener('click', createPaymentLink);
             }
+            else {
+                document.getElementById('singlebuy-info').classList.add('hidden');
+            }
         }
     }
     else {
