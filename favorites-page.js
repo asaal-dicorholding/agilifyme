@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", init);
 async function init() {
     memberstack = window.$memberstackDom;
     const { data: member } = await memberstack.getCurrentMember();
+
+    userId = member.id;
   
     if (isPremiumMember(member.planConnections)) checkProfileData(member.customFields);
 
