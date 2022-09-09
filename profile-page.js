@@ -44,7 +44,7 @@ Webflow.push(function() {
   $(document).off('submit');
 
   // new form handling
-  document.getElementById('wf-form-Delete-Account').submit(e => {
+  document.getElementById('wf-form-Delete-Account').addEventListener('submit', e => {
     e.preventDefault();
     const deleteText = prompt('Bitte E-Mail Adresse eingeben, um Account zu löschen');
 
