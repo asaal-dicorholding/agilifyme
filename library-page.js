@@ -82,8 +82,12 @@ async function markFavorites() {
 
   favorites.forEach(slug => {
     const img = document.getElementById(`favorite_${slug}`);
+    const modalImg = document.getElementById(`modal_favorite_${slug}`);
     
     if (img) {
+      img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
+    }
+    if (modalImg) {
       img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
     }
   })
@@ -97,16 +101,24 @@ async function toggleFavorite(slug) {
   if (index > -1) {
     favorites.splice(index, 1);
     const img = document.getElementById(`favorite_${slug}`);
+    const modalImg = document.getElementById(`modal_favorite_${slug}`);
     
     if (img) {
+      img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf454fbe1866509a97e_ri_heart-line.svg";
+    }
+    if (modalImg) {
       img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf454fbe1866509a97e_ri_heart-line.svg";
     }
   }
   else {
     favorites.push(slug);
     const img = document.getElementById(`favorite_${slug}`);
+    const modalImg = document.getElementById(`modal_favorite_${slug}`);
     
     if (img) {
+      img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
+    }
+    if (modalImg) {
       img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
     }
   }
