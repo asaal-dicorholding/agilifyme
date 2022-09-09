@@ -92,6 +92,7 @@ function getUserData() {
                 if (data.url) {
                     alreadyBought = true;
                     document.getElementById('download-section').classList.remove('hidden');
+                    document.getElementById('singlebuy-info').classList.add('hidden');
                     const downloadButton = document.getElementById('download-retro');
                     spinner.classList.remove('show');
                     downloadButton.href = data.url;
@@ -132,9 +133,6 @@ function setCounter(totalPurchases, purchasesThisMonth) {
                 createPaymentLinkElement.classList.remove('hidden');
                 createPaymentLinkElement.addEventListener('click', createPaymentLink);
             }
-            else {
-                document.getElementById('singlebuy-info').classList.add('hidden');
-            }
         }
     }
     else {
@@ -154,9 +152,7 @@ function setCounter(totalPurchases, purchasesThisMonth) {
                 const createPaymentLinkElement = document.getElementById('create-payment-link');
                 createPaymentLinkElement.classList.remove('hidden');
                 createPaymentLinkElement.addEventListener('click', createPaymentLink);
-            } else {
-                document.getElementById('singlebuy-info').classList.add('hidden');
-            }
+            } 
         }
     }
 }
