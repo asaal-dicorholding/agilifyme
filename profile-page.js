@@ -36,7 +36,7 @@ function removeRequiredAttributes() {
 }
 
 var Webflow = Webflow || [];
-Webflow.push(async function() {
+Webflow.push(function() {
 
   // === Custom Form Handling ===
   
@@ -45,13 +45,13 @@ Webflow.push(async function() {
 
   // new form handling
   document.getElementById('wf-form-Delete-Account').addEventListener('submit', e => {
-    const memberstack = window.$memberstackDom;
-    const { data: member } = await memberstack.getCurrentMember();
-
     e.preventDefault();
-    const deleteText = prompt('Bitte E-Mail Adresse eingeben, um Account-Löschung zu beantragen');
+    const memberstack = window.$memberstackDom;
+    memberstack.getCurrentMember().then(data => {
+        const deleteText = prompt('Bitte E-Mail Adresse eingeben, um Account-Löschung zu beantragen');
 
-    if (deleteText === member.auth.email) return true;
-    return false;
+        if (deleteText === data.member.auth.email) return true;
+        window.alert('E-Mail Adresse nicht korrekt!');
+    });
   });
 });
