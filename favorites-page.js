@@ -98,7 +98,7 @@ async function removeFavorite(slug) {
 
 function setPurchasedTags(purchases) {
     purchases.forEach(purchase => {
-        const tag = document.getElementById(purchase);
+        const tag = document.getElementById(`bought_${purchase}`);
 
         if (tag) {
             tag.innerText = 'Bereits gekauft';
