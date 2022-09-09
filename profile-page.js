@@ -45,8 +45,11 @@ Webflow.push(function() {
 
   // new form handling
   document.getElementById('wf-form-Delete-Account').addEventListener('submit', e => {
+    const memberstack = window.$memberstackDom;
+    const { data: member } = await memberstack.getCurrentMember();
+
     e.preventDefault();
-    const deleteText = prompt('Bitte E-Mail Adresse eingeben, um Account zu löschen');
+    const deleteText = prompt('Bitte E-Mail Adresse eingeben, um Account-Löschung zu beantragen');
 
     if (deleteText === member.auth.email) return true;
     return false;
