@@ -20,6 +20,29 @@ async function init() {
         document.getElementById('no-favorites').classList.remove('hidden');
     }
     removeNonFavoriteRetros(favorites);
+    getUserData();
+}
+
+function getUserData() {
+	const token = memberstack.getMemberCookie();
+  
+	if (userId && token) {
+        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/v1/user/${userId}`, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+            'X-API-KEY': 'X1TzzImCOV773jjVVxRla6bf3jY7huLI4R9vFiXc',
+            },
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            setPurchasedTags(data.purchases);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
 }
 
 function isPremiumMember(planConnections) {
@@ -71,4 +94,14 @@ async function removeFavorite(slug) {
         memberstack.updateMemberJSON({ json: { favorites: favorites } }) ;
         removeNonFavoriteRetros(favorites);
     }    
+}
+
+function setPurchasedTags(purchases) {
+    purchases.forEach(purchase => {
+        const tag = document.getElementById(purchase);
+
+        if (tag) {
+            tag.innerText = 'Bereits gekauft';
+        }
+    });
 }
