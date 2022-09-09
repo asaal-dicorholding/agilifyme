@@ -9,6 +9,14 @@ async function init() {
     const { data: member } = await memberstack.getCurrentMember();
   
     isPremiumMember(member.planConnections) ? checkProfileData(member.customFields) : removeRequiredAttributes();
+
+    document.getElementById('delete-account').onclick(e => {
+        e.preventDefault();
+        const deleteText = prompt('Bitte E-Mail Adresse eingeben, um Account zu löschen');
+
+        if (deleteText === member.auth.email) return true;
+        return false;
+    })
 }
 
 function isPremiumMember(planConnections) {

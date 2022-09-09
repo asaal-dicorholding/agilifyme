@@ -88,7 +88,7 @@ async function markFavorites() {
       img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
     }
     if (modalImg) {
-      img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
+      modalImg.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
     }
   })
 }
@@ -107,7 +107,7 @@ async function toggleFavorite(slug) {
       img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf454fbe1866509a97e_ri_heart-line.svg";
     }
     if (modalImg) {
-      img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf454fbe1866509a97e_ri_heart-line.svg";
+      modalImg.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/62fe4cf454fbe1866509a97e_ri_heart-line.svg";
     }
   }
   else {
@@ -119,7 +119,7 @@ async function toggleFavorite(slug) {
       img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
     }
     if (modalImg) {
-      img.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
+      modalImg.src = "https://uploads-ssl.webflow.com/621ce6639b96713cece09d21/631059e0179147363045ceb7_ri_heart-fill.svg";
     }
   }
   memberstack.updateMemberJSON({ json: { favorites: favorites } }) ;
