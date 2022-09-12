@@ -117,7 +117,7 @@ function setCounter(totalPurchases, purchasesThisMonth) {
 
     if (isPremiumMember) {
         const purchasesLeftThisMonth = Math.max(5 - purchasesThisMonth, 0);
-        purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${purchasesLeftThisMonth} Retros herunterladen.`
+        purchasesCounter.innerHTML = `Du kannst diesen Monat noch ${purchasesLeftThisMonth} Retro(s) herunterladen.`
         
         // show buy button if credits left
         if (purchasesLeftThisMonth > 0) {
