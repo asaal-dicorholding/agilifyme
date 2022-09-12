@@ -5,7 +5,7 @@ let userId;
 let memberstack;
 
 function checkProfileData(member) {
-    if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning').classList.remove('hidden');
+    if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning').classList.add('hidden');
 }
 
 document.addEventListener("DOMContentLoaded", init);
