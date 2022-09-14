@@ -46,15 +46,15 @@ Webflow.push(function() {
   $(document).off('submit');
 
   // new form handling
-  document.getElementById('wf-form-Delete-Account').addEventListener('submit', e => {
+  $('wf-form-Delete-Account').submit(e => {
     e.preventDefault();
     const deleteText = prompt('Bitte E-Mail Adresse eingeben, um Account-Löschung zu beantragen');
-    
+
     if (deleteText === email) {
         return true;
     }
     else {
-        window.alert('E-Mail Adresse nicht korrekt!');
+        alert('E-Mail Adresse nicht korrekt!');
         return false;
     }
   });
