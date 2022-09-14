@@ -25,7 +25,7 @@ function isPremiumMember(planConnections) {
   
 
 function checkProfileData(member) {
-    if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning-message').classList.add('hidden');
+    if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning-message').classList.remove('hidden');
 }
 
 function removeRequiredAttributes() {
@@ -51,5 +51,6 @@ Webflow.push(function() {
     const deleteText = prompt('Bitte E-Mail Adresse eingeben, um Account-Löschung zu beantragen');
     if (deleteText === email) return true;
     window.alert('E-Mail Adresse nicht korrekt!');
+    return false;
   });
 });

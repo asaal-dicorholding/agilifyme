@@ -22,7 +22,7 @@ function isPremiumMember(planConnections) {
 }
 
 function checkProfileData(member) {
-    if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning').classList.add('hidden');
+    if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning').classList.remove('hidden');
 }
 
 var Webflow = Webflow || [];
