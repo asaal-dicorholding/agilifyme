@@ -1,14 +1,12 @@
 "use strict";
 
 const PREMIUM_PLAN = 'pln_premium-plan-3a1gw084x';
-let email;
 
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
     const memberstack = window.$memberstackDom;
     const { data: member } = await memberstack.getCurrentMember();
-    email = member.auth.email;
   
     isPremiumMember(member.planConnections) ? checkProfileData(member.customFields) : removeRequiredAttributes();
 }
@@ -25,7 +23,7 @@ function isPremiumMember(planConnections) {
   
 
 function checkProfileData(member) {
-    if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipcode) document.getElementById('profile-warning-message').classList.remove('hidden');
+    if (!member.address || !member.city || !member.company || !member.country || !member.name || !member.vat || !member.zipCode) document.getElementById('profile-warning-message').classList.remove('hidden');
 }
 
 function removeRequiredAttributes() {
@@ -48,14 +46,9 @@ Webflow.push(function() {
   // new form handling
   $('wf-form-Delete-Account').submit(e => {
     e.preventDefault();
-    const deleteText = prompt('Bitte E-Mail Adresse eingeben, um Account-Löschung zu beantragen');
-
-    if (deleteText === email) {
+    if (window.confirm('Bist Du Dir sicher, dass Du die Löschung deines Accounts beantragen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')) {
         return true;
     }
-    else {
-        alert('E-Mail Adresse nicht korrekt!');
-        return false;
-    }
+    return false;
   });
 });
