@@ -44,7 +44,7 @@ Webflow.push(function() {
   $(document).off('submit');
 
   // new form handling
-  $('wf-form-Delete-Account').submit(e => {
+  $('#wf-form-Delete-Account').submit(e => {
     e.preventDefault();
     if (window.confirm('Bist Du Dir sicher, dass Du die Löschung deines Accounts beantragen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.')) {
         return true;
