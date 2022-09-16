@@ -58,12 +58,13 @@ function setCounter(totalPurchases, purchasesThisMonth) {
 
     if (isPremiumMember) {
         const purchasesLeftThisMonth = Math.max(5 - purchasesThisMonth, 0);
-        purchasesCounter.innerText = `${purchasesLeftThisMonth} Download(s) frei`
+        purchasesCounter.innerText = `${purchasesLeftThisMonth} Download(s) frei`;
     }
     else {
         const purchasesLeft = Math.max(3 - totalPurchases, 0);
-        purchasesCounter.innerText = `${purchasesLeft} Download(s) frei`
+        purchasesCounter.innerText = `${purchasesLeft} Download(s) frei`;
     }
+    purchasesCounter.classList.remove('hidden');
 }
 
 function setPurchasedTags(purchases) {
