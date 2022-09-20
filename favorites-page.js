@@ -1,6 +1,6 @@
 "use strict";
 
-const PREMIUM_PLAN = 'pln_premium-plan-3a1gw084x';
+const PREMIUM_PLAN = 'pln_premium-plan--s3z90fgo';
 let userId;
 let memberstack;
 

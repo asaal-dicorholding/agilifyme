@@ -1,7 +1,7 @@
 "use strict";
 
-const PREMIUM_PLAN = 'pln_premium-plan-3a1gw084x';
-const FREEMIUM_PLAN= 'pln_freemium-plan-y91h108t5';
+const PREMIUM_PLAN = 'pln_premium-plan--s3z90fgo';
+const FREEMIUM_PLAN= 'pln_freemium-plan-9nz80fpd';
 
 let userId;
 let isPremiumMember = false;
