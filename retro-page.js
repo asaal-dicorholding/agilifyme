@@ -10,10 +10,13 @@ let isPremiumMember = false;
 let alreadyBought = false;
 let spinner;
 let memberstack;
+let stage = 'prod';
 
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
+    if (window.location.href.includes('agilifyme.webflow.io')) stage = 'dev';
+
     memberstack = window.$memberstackDom;
     const { data: member } = await memberstack.getCurrentMember();
 
@@ -39,7 +42,7 @@ function buyRetro() {
     const token = memberstack.getMemberCookie();
   
     if (userId && token) {
-        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/v1/user/${userId}`, {
+        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/${stage}/user/${userId}`, {
         method: 'PUT', 
         headers: {
             'Content-Type': 'application/json',
@@ -53,7 +56,6 @@ function buyRetro() {
             } 
             throw new Error(response.message);
         }).then((data) => {
-            console.log('Success:', data);
             if (data) {
                 document.getElementById('purchases_counter').classList.add('hidden');
                 document.getElementById('buy-retro').classList.add('hidden');
@@ -73,7 +75,7 @@ function getUserData() {
 	const token = memberstack.getMemberCookie();
   
 	if (userId && token) {
-        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/v1/retro-url/user/${userId}?slug=${productSlug}`, {
+        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/${stage}/retro-url/user/${userId}?slug=${productSlug}`, {
             method: 'GET',
             headers: {
             'Content-Type': 'application/json',
@@ -86,8 +88,6 @@ function getUserData() {
                 }
                 throw new Error(response.message);
             }).then((data) => {
-                console.log('Success:', data);
-
                 // user has already bought this retro
                 if (data.url) {
                     alreadyBought = true;
@@ -207,7 +207,7 @@ function createPaymentLink() {
     const token = memberstack.getMemberCookie();
 
     if (userId && token) {
-        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/v1/payment-link/user/${userId}?slug=${productSlug}`, {
+        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/${stage}/payment-link/user/${userId}?slug=${productSlug}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -220,7 +220,6 @@ function createPaymentLink() {
                     }
                     throw new Error(response.message);
                 }).then((data) => {
-                    console.log('Success:', data);
                     if (data.url) {
                         document.getElementById('create-payment-link').classList.add('hidden');
                         const singleBuyButton = document.getElementById('single-buy-retro');

@@ -3,10 +3,13 @@
 const PREMIUM_PLAN = 'pln_premium-plan--s3z90fgo';
 let userId;
 let memberstack;
+let stage = 'prod';
 
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
+    if (window.location.href.includes('agilifyme.webflow.io')) stage = 'dev';
+
     memberstack = window.$memberstackDom;
     const { data: member } = await memberstack.getCurrentMember();
 
@@ -29,7 +32,7 @@ function getUserData() {
 	const token = memberstack.getMemberCookie();
   
 	if (userId && token) {
-        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/v1/user/${userId}`, {
+        fetch(`https://57v71m7hlk.execute-api.eu-central-1.amazonaws.com/${stage}/user/${userId}`, {
             method: 'GET',
             headers: {
             'Content-Type': 'application/json',
