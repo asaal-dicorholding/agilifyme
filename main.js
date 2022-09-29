@@ -4,12 +4,14 @@ function googleTranslateElementInit() {
 }
 
 const AVAILABLE_LANGUAGES = ["en", "fr", "es"];
+const domain = '.agilify.me';
 
 document.addEventListener("DOMContentLoaded", init);
 
 function init() {
 
     const languageCookie = readCookie("googtrans")?.split('/')[2];
+    if (window.location.href.includes('agilifyme.webflow.io')) domain = '.webflow.io';
 
     if (!languageCookie) {
 
@@ -19,16 +21,16 @@ function init() {
 
         if (browserLangSplit !== "de") {
             if (AVAILABLE_LANGUAGES.indexOf(browserLangSplit) > -1) {
-                setCookie("googtrans", `/de/${browserLangSplit}`, "Session", "/", ".webflow.io");
+                setCookie("googtrans", `/de/${browserLangSplit}`, "Session", "/", domain);
                 setCookie("googtrans", `/de/${browserLangSplit}`, "Session", "/");
             } else {
                 // default language is english if browser language is not available as translation
-                setCookie("googtrans", '/de/en', "Session", "/", ".webflow.io");
+                setCookie("googtrans", '/de/en', "Session", "/", domain);
                 setCookie("googtrans", '/de/en', "Session", "/");
             }
         } else {
             // remove cookies if german is browser language
-            setCookie("googtrans", "", 0, "/", ".webflow.io");
+            setCookie("googtrans", "", 0, "/", domain);
             setCookie("googtrans", "", 0, "/");
         }
     }
@@ -62,11 +64,14 @@ function triggerHtmlEvent(element, eventName) {
 
 jQuery('.lang-select').click(function() {
 
+    const domain = '.agilify.me';
+    if (window.location.href.includes('agilifyme.webflow.io')) domain = '.webflow.io';
+
     var theLang = jQuery(this).attr('data-lang');
     jQuery('.goog-te-combo').val(theLang);
 
     if (theLang === 'de') {
-        setCookie("googtrans", "", 0, "/", ".webflow.io");
+        setCookie("googtrans", "", 0, "/", domain);
         setCookie("googtrans", "", 0, "/");
     }
     window.location = jQuery(this).attr('href');
@@ -86,19 +91,6 @@ function setCookie(b, h, c, f, e) {
     var e = (typeof e === "undefined") ? "" : "; domain=" + e;
     document.cookie = b + "=" + h + "; " + a + "path=" + f + e
 }
-
-jQuery('.lang-select').click(function() {
-
-    var theLang = jQuery(this).attr('data-lang');
-    jQuery('.goog-te-combo').val(theLang);
-
-    if (theLang === 'de') {
-        setCookie("googtrans", "", 0, "/", ".webflow.io");
-        setCookie("googtrans", "", 0, "/");
-    }
-    window.location = jQuery(this).attr('href');
-    location.reload();
-});
 
 $('.custom-button').on('click', function (evt) {
     $('.target-tab-link').triggerHandler('click');
