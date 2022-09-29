@@ -4,7 +4,7 @@ function googleTranslateElementInit() {
 }
 
 const AVAILABLE_LANGUAGES = ["en", "fr", "es"];
-const domain = '.agilify.me';
+let domain = '.agilify.me';
 
 document.addEventListener("DOMContentLoaded", init);
 
@@ -64,7 +64,7 @@ function triggerHtmlEvent(element, eventName) {
 
 jQuery('.lang-select').click(function() {
 
-    const domain = '.agilify.me';
+    let domain = '.agilify.me';
     if (window.location.href.includes('agilifyme.webflow.io')) domain = '.webflow.io';
 
     var theLang = jQuery(this).attr('data-lang');
