@@ -32,6 +32,10 @@ function init() {
             // remove cookies if german is browser language
             setCookie("googtrans", "", 0, "/", domain);
             setCookie("googtrans", "", 0, "/");
+            // set url for german video 
+            const url = 'https://www.youtube-nocookie.com/embed/aFyo9i6ZHsM'
+            document.getElementById('video_iframe').src = url;
+
         }
     }
 }
