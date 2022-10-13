@@ -33,7 +33,7 @@ function init() {
             setCookie("googtrans", "", 0, "/", domain);
             setCookie("googtrans", "", 0, "/");
             // set url for german video 
-            const url = 'https://www.youtube-nocookie.com/embed/aFyo9i6ZHsM'
+            const url = 'https://www.youtube-nocookie.com/embed/aFyo9i6ZHsM';
             document.getElementById('video_iframe').src = url;
 
         }
@@ -77,6 +77,11 @@ jQuery('.lang-select').click(function() {
     if (theLang === 'de') {
         setCookie("googtrans", "", 0, "/", domain);
         setCookie("googtrans", "", 0, "/");
+        const url = 'https://www.youtube-nocookie.com/embed/aFyo9i6ZHsM';
+        document.getElementById('video_iframe').src = url;
+    } else {
+        const url = 'https://www.youtube-nocookie.com/embed/qBN5rknnWgc';
+        document.getElementById('video_iframe').src = url;
     }
     window.location = jQuery(this).attr('href');
     location.reload();
