@@ -28,7 +28,7 @@ async function init() {
 
 function setUserPlan(planConnections) {
   planConnections.forEach(plan => {
-      if (plan.active && plan.planId === PREMIUM_PLAN) isPremiumMember = true;
+      if (plan.status === 'ACTIVE' && plan.planId === PREMIUM_PLAN) isPremiumMember = true;
   })
 }
 

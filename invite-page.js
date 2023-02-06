@@ -15,7 +15,7 @@ function isPremiumMember(planConnections) {
   let result = false;
 
   planConnections.forEach(plan => {
-      if (plan.active && plan.planId === PREMIUM_PLAN) result = true;
+      if (plan.status === 'ACTIVE' && plan.planId === PREMIUM_PLAN) result = true;
   });
 
   return result;
